@@ -1,0 +1,125 @@
+<div id="bg">
+          <!-- <div id="blackLayer"></div> -->
+          <img src="./background.jpg" alt="">
+      </div>
+<!-- <div id="main">
+          <div id="image">
+              <img id="photo" src="./beatles.jpg" alt="">
+          </div>
+          <div id="player">
+              <div id="songTitle">Demo</div>
+              <div id="buttons">
+                  <button id="pre"><i class="fas fa-backward"></i></button>
+                  <button class="play"><i class="fas fa-play"></i></button>
+                  <button class="pause"><i class="fas fa-pause"></i></button>
+                  <button id="next"><i class="fas fa-forward"></i></button>
+              </div>
+              <div class="seek-bar">
+                  <!-- <div id="fill"></div>
+                  <div id="handle"></div> -->
+                  <input type="range">
+              </div>
+          </div>
+      </div> -->
+
+
+Javascript
+
+var songs = ["Help!.mp3","Hey_Jude.mp3","Let_Me_Down.mp3"]
+var poster = ["help.jpg","hey-jude.jpeg","let-me-down.jpg"]
+
+var songTitle = document.getElementById("songTitle");
+var fillBar = document.getElementById("fill")
+var image = document.getElementById("photo")
+var seekbar = document.getElementById("seek-bar")
+
+var pauseBtn = document.querySelector(".pause")
+var playBtn = document.querySelector(".play")
+var preBtn = document.getElementById("pre")
+var nextBtn = document.getElementById("next")
+
+var song = new Audio();
+var currentSong = 0;
+
+window.addEventListener("load",function(){
+    song.src = songs[currentSong];
+    songTitle.textContent = songs[currentSong];
+    image.src = poster[currentSong];
+    //song.play();
+    seekbar.setAttribute("value",0);
+    seekbar.setAttribute("min",0);
+    seekbar.setAttribute("max",0);
+})
+
+function playOrPauseSong(){
+    if(song.paused){
+        song.play();
+        seekbar.setAttribute("max",parseInt(song.duration))
+    }
+    else{
+        song.pause();
+    }
+}
+setInterval(function(){
+    seekbar.value = parseInt(song.currentTime);
+},1000);
+playBtn.addEventListener("click",function(){
+    playOrPauseSong();
+    playBtn.classList.add("hide-play")
+    pauseBtn.classList.add("show-pause")  
+})
+pauseBtn.addEventListener("click",function(){
+    playOrPauseSong();
+    playBtn.classList.remove("hide-play")
+    pauseBtn.classList.remove("show-pause") 
+})
+
+song.addEventListener("timeupdate",function(){
+    var position = song.currentTime;
+    fillBar.style.width = position * 10 + '%'
+})
+
+nextBtn.addEventListener("click",function(){
+    currentSong++;
+    if(currentSong > songs.length){
+        currentSong = 0;
+    }
+    song.src = songs[currentSong];
+    songTitle.textContent = songs[currentSong];
+    image.src = poster[currentSong];
+    playOrPauseSong();
+})
+
+preBtn.addEventListener("click",function(){
+    currentSong--;
+    if(currentSong < 0){
+        currentSong = songs.length-1;
+    }
+    song.src = songs[currentSong];
+    songTitle.textContent = songs[currentSong];
+    image.src = poster[currentSong];
+    playOrPauseSong();
+})
+
+seekbar.addEventListener("change",function(){
+    song.currentTime = seekbar.value;
+})
+
+/* margin-bottom: 0.5rem;
+    visibility: hidden; */
+    /* top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; */
+    /* position: absolute;
+    object-fit: cover;
+    height: 200px;
+    border: 0.25rem solid #c59d5f;
+    border-radius: 0.5rem;
+    width: 200px;
+    background: rgba(136, 129, 65, 0.72);
+    color: #fff;
+    display: none;
+    opacity: 0;
+    transition: opacity .2s, visibility .2s;
+    text-align: center; */
